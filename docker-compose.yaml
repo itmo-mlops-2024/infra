@@ -1,0 +1,31 @@
+services:
+  mlflow:
+    build: ./mlflow
+    environment:
+      - PG_DATABASE=postgresql://postgres:postgres@mlflow-db:5432/mlflowdb
+      - MLFLOW_S3_ENDPOINT_URL=https://storage.yandexcloud.net
+      - AWS_S3_BUCKET_NAME=itmo-mlflow
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    depends_on: 
+      db:
+        condition: service_healthy
+    ports:
+      - "9000:5000"
+
+  db:
+    image: postgres
+    hostname: mlflow-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mlflowdb
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
