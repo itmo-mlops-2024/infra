@@ -28,12 +28,28 @@ services:
       timeout: 5s
       retries: 5
 
-  nexus:
-    image: sonatype/nexus3
-    ports: 
-      - "8081:8081"
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
     volumes:
-      - nexus-data:/nexus-data
+      - grafana-storage:/var/lib/grafana
+  
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+
+  # nexus:
+  #   image: sonatype/nexus3
+  #   ports: 
+  #     - "8081:8081"
+  #   volumes:
+  #     - nexus-data:/nexus-data
 
 volumes:
   nexus-data:
+  grafana-storage:
+  prometheus-data:
