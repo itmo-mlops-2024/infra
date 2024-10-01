@@ -12,7 +12,7 @@ jobs:
           host: ${{ secrets.INFRA_HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "mlflow,docker-compose.yaml"
+          source: "mlflow,docker-compose.yaml,prometheus.yaml"
           target: infra
       - name: Restart containers
         uses: appleboy/ssh-action@v1.0.3
